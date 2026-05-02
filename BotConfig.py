@@ -452,6 +452,20 @@ class BotConfig:
             self.__set_value('require_stake', 'FALSE')
 
     ######################################################
+    # require_delegate                                      #
+    ######################################################
+    @property
+    def require_delegate(self):
+        return self.__get_value('require_delegate').upper()=='TRUE'
+
+    @require_delegate.setter
+    def require_delegate(self, value: bool):
+        if (value):
+            self.__set_value('require_delegate', 'TRUE')
+        else:
+            self.__set_value('require_delegate', 'FALSE')
+
+    ######################################################
     # tip_as_stake                                       #
     ######################################################
     @property
