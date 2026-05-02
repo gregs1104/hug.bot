@@ -14,6 +14,7 @@ import HiveBotUtils
 from BotConfig import BotConfig
 
 from beem.account import Account
+from beem.amount import Amount
 from hiveengine.wallet import Wallet
 
 import re
