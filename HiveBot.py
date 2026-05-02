@@ -19,7 +19,7 @@ from hiveengine.wallet import Wallet
 
 import re
 import requests
-
+import sys
 
 class HiveBot:
     """ This class provides the HIVE bot functionality.
@@ -52,15 +52,12 @@ class HiveBot:
 
     DEBUG_MODE = False
 
-    
     def __init__(self, config: BotConfig):
         self.config = config
 
         ### Regex to search for bot commands in the comments
         ### Used to find out how many (other?) commands are in that one comment.
         self.regex_command_pattern = re.compile("[!][a-zA-Z]{3,15}")
-
-        
 
         keys=[]
         if (self.config.active_key==''):
@@ -191,6 +188,7 @@ class HiveBot:
         c.close()
 
         return int(row[0])
+
     
     def save_vote_action(self, datum, permlink, weight):
         """ Adds a row to votes table indicating that a vote has been cast on a comment."""
@@ -504,9 +502,13 @@ class HiveBot:
         else:
             balance = float(wallet_token_info['balance'])
 
-        # To be on the save side we check against maximum tipped amount
+        # To be on the safe side we check against maximum tipped amount
         return balance >= self.config.get_max_tip()
 
+    def chain_throttle(self):
+        """ Pause after each blockchain transaction to comply with rate guidelines. """
+        time.sleep(4)
+ 
     def process_comment_operation(self, operation):
         """ Process a comment on the blockchain. 
             
@@ -530,7 +532,8 @@ class HiveBot:
         token_name = self.config.token_name
 
         # I've never seen author been blank but better check to be sure.
-        # parent_author is sometimes blank, when a post to a community is treated as a comment
+        # When a whole new post is created, there parent_author will be blank.  Filter those out
+        # since tipping shouldn't trigger against posts; it only runs against comments on them.
         if (author == '' or parent_author == ''):
             self.to_debug(f'either author={author} or parent_author={parent_author} is empty so nothing to do.')
             return
@@ -613,7 +616,7 @@ class HiveBot:
         if (author in self.config.no_limit_sender):
             tipping_level = self.config.get_max_tipping_level()
         else:
-            if (self.config.require_stake):
+-            if (self.config.require_stake):
                 tipping_level = self.config.get_tipping_level(HiveBotUtils.get_staked_balance(author, token_name))
             else:
                 tipping_level = self.config.get_tipping_level(HiveBotUtils.get_liquid_balance(author, token_name))
@@ -638,6 +641,7 @@ class HiveBot:
 
 
             self.save_action(datum, author, parent_author, block_num, permlink, parent_permlink, self.RC_NO_STAKE, 0, 0)
+            self.chain_throttle()
             return
 
         # get the number of calls the author already made today
@@ -665,6 +669,7 @@ class HiveBot:
                 else:
                     self.to_log('--- Could not post comment. Moving on.')
             self.save_action(datum, author, parent_author, block_num, permlink, parent_permlink, self.RC_DAILY_LIMIT, 0, 0)
+            self.chain_throttle()
             return
 
         # Check the bot's wallet for sufficient funds
@@ -682,15 +687,18 @@ class HiveBot:
                 recipient_memo_template = jinja2.Template(self.config.transfer_recipient_memo)
                 self.hive_wallet.transfer(parent_author, tipping_level.tip_recipient, token_name, recipient_memo_template.render(sender_account=author, target_account=parent_author))
                 self.to_log(f'--- sent {tipping_level.tip_recipient} {token_name} to {parent_author}')
+                self.chain_throttle()
+
             if tipping_level.tip_caller > 0:
                 caller_memo_template = jinja2.Template(self.config.transfer_caller_memo)
                 self.hive_wallet.transfer(author, tipping_level.tip_caller, token_name, caller_memo_template.render(sender_account=author, target_account=parent_author))
                 self.to_log(f'--- sent {tipping_level.tip_caller} {token_name} to {author}')
+                self.chain_throttle()
 
-            time.sleep(3)
             # IMPORTANT: save the fact in Database.
             # Otherwise if we crash during the rest of this block, the tip is sent again when we pick it up after restart!
             self.save_action(datum, author, parent_author, block_num, permlink, parent_permlink, self.RC_SUCCESS, tipping_level.tip_recipient, tipping_level.tip_caller)
+            self.chain_throttle()
 
             # Write the comment
             if (self.config.enable_comments):
@@ -709,6 +717,7 @@ class HiveBot:
                     self.to_log('--- Comment sent.')
                 else:
                     self.to_log('--- Could not post comment. Moving on.')
+                self.chain_throttle()
 
             # Upvote the parent
             if self.has_voted(f'@{parent_author}/{parent_permlink}'):
@@ -731,11 +740,12 @@ class HiveBot:
                 else:
                     self.to_log(f"--- Mana at {current_mana:.2f} with fixed vote at {weight}")
                 self.upvote(f'@{parent_author}/{parent_permlink}', weight)
+                self.chain_throttle()
             return
         
         ## If we reach this point no action was taken, because transfers are disabled. Record the fact in the database.
         self.save_action(datum, author, parent_author, block_num, permlink, parent_permlink, self.RC_TRANSFER_DISABLED, 0, 0)
-
+        self.chain_throttle()
 
 
     def run(self):
