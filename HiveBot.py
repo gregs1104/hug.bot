@@ -51,6 +51,8 @@ class HiveBot:
     RC_FAIL = -2
 
     DEBUG_MODE = False
+    DEBUG_ONE_BLOCK = False
+    DEBUG_ONE_CALL = False
 
     def __init__(self, config: BotConfig):
         self.config = config
@@ -629,6 +631,11 @@ class HiveBot:
             else:
                 tipping_level = self.config.get_tipping_level(HiveBotUtils.get_liquid_balance(author, token_name))
 
+        # Debugging
+        if (self.DEBUG_ONE_CALL == True): 
+            self.to_log(f'--- Stopping at request from {author} for debugging')
+            sys.exit(0)
+
         if (tipping_level.calls==0):
             # Level.calls at 0 means we can stop here, user does not meet minimum requirements
             self.to_log(f'--- {author} does not meet minimum requirements.')
@@ -783,6 +790,9 @@ class HiveBot:
             # Did we reach a new block number?
             # Memorize it as new starting block and write it down.
             if (operation['block_num'] != start_block):
+                # Debug exit after only processing one block
+                if (self.DEBUG_ONE_BLOCK):
+                    sys.exit(0)
                 start_block = operation['block_num']
                 self.config.current_block=start_block
                 print(f'Reading Block #{start_block}')
