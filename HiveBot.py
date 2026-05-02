@@ -54,6 +54,11 @@ class HiveBot:
     DEBUG_ONE_BLOCK = False
     DEBUG_ONE_CALL = False
 
+    CENT_AMOUNT = 1.0
+    CENT_TOKEN = 'CENT'
+    CENT_RECIPIENT_MEMO = '{{sender_account}} shared a CENT with you.'
+    CENT_CALLER_MEMO = '{{sender_account}} shared a CENT with you.'
+
     def __init__(self, config: BotConfig):
         self.config = config
 
@@ -708,6 +713,17 @@ class HiveBot:
                 caller_memo_template = jinja2.Template(self.config.transfer_caller_memo)
                 self.hive_wallet.transfer(author, tipping_level.tip_caller, token_name, caller_memo_template.render(sender_account=author, target_account=parent_author))
                 self.to_log(f'--- sent {tipping_level.tip_caller} {token_name} to {author}')
+                self.chain_throttle()
+
+            if self.CENT_AMOUNT > 0:
+                recipient_cent_template = jinja2.Template(self.CENT_RECIPIENT_MEMO)
+                self.hive_wallet.transfer(parent_author, self.CENT_AMOUNT, self.CENT_TOKEN, recipient_cent_template.render(sender_account=author, target_account=parent_author))
+                self.to_log(f'--- sent {self.CENT_AMOUNT} {self.CENT_TOKEN} to {parent_author}')
+                self.chain_throttle()
+
+                caller_cent_template = jinja2.Template(self.CENT_CALLER_MEMO)
+                self.hive_wallet.transfer(author, self.CENT_AMOUNT, self.CENT_TOKEN, caller_cent_template.render(sender_account=author, target_account=parent_author))
+                self.to_log(f'--- sent {self.CENT_AMOUNT} {self.CENT_TOKEN} to {author}')
                 self.chain_throttle()
 
             # IMPORTANT: save the fact in Database.
