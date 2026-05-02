@@ -1,4 +1,4 @@
-{{sender_account}}, sorry! You need more ${{token_name}} to use this command.
+{{sender_account}}, sorry! You need to delegate more Hive Power to use this command.
 
-The minimum requirement is {{min_staked}} {{token_name}} in wallet.
+The minimum requirement is {{min_staked}} Hive Power delegation to the uni-coin account.
 <sub>Respond with STOP to remove mentions. Respond with TAGME to reallow mentions.</sub>

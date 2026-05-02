@@ -1,10 +1,10 @@
-<h3>There are so many friendly people out there who just wanna give each other a hug.</h3>
+<h3>There are so many friendly people out there who just wanna give each other a unicoin.</h3>
 
 <center>
-![avatar_crop.png](https://files.peakd.com/file/peakd-hive/hug.bot/avatar_crop.png)
+![avatar_crop.png](https://images.ecency.com/DQmRv8yoNeUSUFyUKxef1eeVkMd3WkxchAthTV7U16vNkQx/unicoinlogo.png)
 </center>
 
-<b>To clean up the comments but still inform the hugger and huggee, these comments will now be collected in a daily posting. Because like a hug a great idea can be shared with everyone.</b>
+<b>To limit the comments but still inform the sender and receiver, these comments will now be collected in a daily posting. Because like a unicorn a great idea can be shared with everyone.</b>
 
 <hr>
 
@@ -13,43 +13,32 @@
 |||
 |-|-|
 |Total calls|{{total_calls}}|
-|Successfully delivered hugs |{{successful_calls}}|
+|Successfully delivered unicoins |{{successful_calls}}|
 |Failed because daily limit exceeded|{{failed_daily_limit}}|
 |Failed because too many simultaneous commands|{{failed_too_many_commands}}|
 
-We just started collecting these statistics in a useful way. When we get two weeks worth of data the analysis will be a little more detailed.
+<h4>About the Unicoin token</h4>
 
-<h4>About the Hug token</h4>
+Everyone deserves a unicorn. 🦄
 
-Everyone deserves a hug. 🤗 
+Call the bot with either !UNICOIN or !UNI in your comment and you will share a unicorn with the person you are responding to.
 
-Call the bot with either !HUG or !Hug or !hug in your comment and you will share a hug with the person you are responding to. I.e. you both get one hug token.
+The call levels are based on 1 UNICOIN call per 25 Hive Power delegated.  There is a maximum of 25/day.  The current call limits work like this:
 
-There is no requirement to call the bot at least once per day. If you ever got hugged (i.e. got at least one HUG token in your wallet) you may call the bot a second time.
-The current call levels are:
-
-|HUG in wallet|calls per day|
+|Hive Power Delegation|UNICOIN Calls Per Day||
 |-|-|
-|0|1🤗|
-|1|2🤗|
-|10|3🤗|
-|100|4🤗|
-|500|5🤗|
+|25|1🦄|
+|50|2🦄|
+|75|3🦄|
+|100|4🦄|
+|125|5🦄|
+|250|10🦄|
+|375|15🦄|
+|500|20🦄|
+|625|25🦄|
 
-<center><b>There is no monetary value to the token. It is pure symbolic, as a hug should be.</b></center>
+**The @uni-coin bot will ignore your call if you use more than 5 !commands in your comment.**
 
-The requirement levels for further calls might be changed in the future depending on token distribution. At least one hug will always be free.
-
-**The bot will ignore your call if you use more than 5 !commands in your comment.**
-
-<b>New since 2024-11-27:</b> The bot will now upvote the post it is called upon with a fixed 50% weight.
-<b>New since 2024-12-01:</b> Respond with STOP to remove mentions. Respond with TAGME to reallow mentions.
-<b>New since 2024-12-01:</b> This daily posting.
-<b>New since 2024-12-08:</b> Vote weight is now adjusted depending on available mana.
-<b>New since 2024-12-13:</b> Collecting statistical data and posting it with next days post.
-<b>New since 2024-12-13:</b> Vote weight now depends on how many HUG tokens are in recipient's wallet.
-<b>New since 2024-12-19:</b> The caller gets a hug token, too.
-<b>New since 2024-12-29:</b> Upvote is only cast if the recipient's post is a main post (i.e. not a comment).
+<b>Bot created 2025-04-09:</b> Based on the https://github.com/hannes-stoffel/hug.bot source code to the https://peakd.com/@hug.bot Hug bot
+<b>Update 2025-08-18:</b> Expand call limit from 10 to 25.  Adjust amount transfered to add bonus CENT token.  Expand maximum command tag limit from 5 to 25.
 <hr>
-
-<sub>hug.bot is a hobby project by @hannes-stoffel to get into Python programming. The proceeds of this post will be used to increase the voting power of the bot and fund its existence.</sub>
