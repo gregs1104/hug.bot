@@ -70,6 +70,13 @@ class BotConfig:
             result.calls = row[1]
             result.tip_recipient = row[2]
             result.tip_caller = row[3]
+
+        # Query that fails to match returns a valid row, but each of its fields will be None.
+        if (row[0] is None):  result.balance=0
+        if (row[1] is None):  result.calls=0
+        if (row[2] is None):  result.tip_recipient=0
+        if (row[3] is None):  result.tip_caller=0
+
         return result
 
     def get_max_tipping_level(self) -> HiveTippingLevel:
