@@ -616,7 +616,15 @@ class HiveBot:
         if (author in self.config.no_limit_sender):
             tipping_level = self.config.get_max_tipping_level()
         else:
--            if (self.config.require_stake):
+            # TODO make delegation account config option
+            deleg_acct="uni-coin"
+            deleg_power = self.get_delegated_power(author, deleg_acct)
+            self.to_log(f'--- {author} has delegated {deleg_power} to {self.config.account_name}')
+
+            if (True):   #(self.config.require_delegate):
+                tipping_level = self.config.get_tipping_level(deleg_power)
+                self.to_log(f'--- Based on delegation of {deleg_power} to {self.config.account_name}, {author} authorized to call {tipping_level.calls} times')
+            elif (self.config.require_stake):
                 tipping_level = self.config.get_tipping_level(HiveBotUtils.get_staked_balance(author, token_name))
             else:
                 tipping_level = self.config.get_tipping_level(HiveBotUtils.get_liquid_balance(author, token_name))
