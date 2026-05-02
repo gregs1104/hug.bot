@@ -190,7 +190,6 @@ class HiveBot:
         c.close()
 
         return int(row[0])
-
     
     def save_vote_action(self, datum, permlink, weight):
         """ Adds a row to votes table indicating that a vote has been cast on a comment."""
@@ -203,6 +202,48 @@ class HiveBot:
         ])
         c.close()
         self.config.db_connection.commit()
+
+    def get_delegated_power(self,user: str, deleg_acct: str) -> float:
+        """ Return Hive Power delegated to the bot account by the user"""
+
+        client = self.HIVE
+        account = Account(user)
+
+        # we need high precision for VESTS computations
+        denom = 1e6
+        dgpo = client.get_dynamic_global_properties()
+        total_vesting_fund_hive = Amount(dgpo['total_vesting_fund_hive']).amount
+        total_vesting_shares_mvest = Amount(dgpo['total_vesting_shares']).amount / denom
+        base_per_mvest = total_vesting_fund_hive / total_vesting_shares_mvest
+
+        # capture list limit
+        # TODO Not sure if limit can just be 1, or if it really needs to be unlimited.
+        limit = 10
+
+        # get index and selected list name
+        delegations = account.get_vesting_delegations(limit=limit)
+
+        if len(delegations) == 0:
+            # TODO Make this a proper log entry
+            print('No delegations found')
+            return float(0)
+
+#        print("Returned delegations:",delegations)
+
+        # Not sure this will ever return more than one entry, summing to be safe
+        total_delegated = 0
+        for delegation in delegations:
+#            print("Checking:  ",account['name'],' -> ' + delegation['delegatee'],delegation['vesting_shares']['amount'])
+            if delegation['delegatee'] == deleg_acct:
+#                print("Match:  ",account['name'],' -> ' + delegation['delegatee'],delegation['vesting_shares']['amount'])
+
+                delegated_vests = float(delegation['vesting_shares']['amount']) / denom
+                delegated_base = (delegated_vests / denom) * base_per_mvest
+                total_delegated = total_delegated + delegated_base
+
+#        print(account['name'],' -> ' + delegation['delegatee'] + ': ' + str(total_delegated))
+
+        return float(total_delegated)
 
     def get_usercalls_by_date(self, user, datum) -> int:
         """ Determine how many successfull calls a user already made on a given date."""
