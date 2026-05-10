@@ -1,10 +1,10 @@
-<h3>There are so many friendly people out there who just wanna give each other a unicoin.</h3>
+<h3>There are so many friendly people out there who just wanna give each other pixy dust</h3>
 
 <center>
-![avatar_crop.png](https://images.ecency.com/DQmRv8yoNeUSUFyUKxef1eeVkMd3WkxchAthTV7U16vNkQx/unicoinlogo.png)
+![avatar_crop.png](https://images.ecency.com/DQmebFBg7DSjU8Zm2junPS3W4tX5R3HsHbRE4NRWLEmSPgx/a_dreamy_close_up_photograph_of_an_ether_b_zjy_heqdojnjvqtyuefa_xo5i7uupt_gh_xq9stpzrw_sd.jpeg)
 </center>
 
-<b>To limit the comments but still inform the sender and receiver, these comments will now be collected in a daily posting. Because like a unicorn a great idea can be shared with everyone.</b>
+<b>To limit the comments but still inform the sender and receiver, these comments will now be collected in a daily posting. Because like pixy dust a great idea can be shared with everyone.</b>
 
 <hr>
 
@@ -13,32 +13,31 @@
 |||
 |-|-|
 |Total calls|{{total_calls}}|
-|Successfully delivered unicoins |{{successful_calls}}|
+|Successfully delivered pixydust |{{successful_calls}}|
 |Failed because daily limit exceeded|{{failed_daily_limit}}|
 |Failed because too many simultaneous commands|{{failed_too_many_commands}}|
 
-<h4>About the Unicoin token</h4>
+<h4>About the PIXYDUST token</h4>
 
-Everyone deserves a unicorn. 🦄
+Everyone deserves pixy dust. 🧚
 
-Call the bot with either !UNICOIN or !UNI in your comment and you will share a unicorn with the person you are responding to.
+Call the bot with either !PIXYDUST or !PIXY in your comment and you will share pixy dust with the person you are responding to.
 
-The call levels are based on 1 UNICOIN call per 25 Hive Power delegated.  There is a maximum of 25/day.  The current call limits work like this:
+The call levels are based on 1 PIXYBOT call per 25 Hive Power delegated.  There is a maximum of 25/day.  The current call limits work like this:
 
-|Hive Power Delegation|UNICOIN Calls Per Day||
+|Hive Power Delegation|PIXYBOT Calls Per Day||
 |-|-|
-|25|1🦄|
-|50|2🦄|
-|75|3🦄|
-|100|4🦄|
-|125|5🦄|
-|250|10🦄|
-|375|15🦄|
-|500|20🦄|
-|625|25🦄|
+|25|1🧚|
+|50|2🧚|
+|75|3🧚|
+|100|4🧚|
+|125|5🧚|
+|250|10🧚|
+|375|15🧚|
+|500|20🧚|
+|625|25v|
 
-**The @uni-coin bot will ignore your call if you use more than 5 !commands in your comment.**
+**The @pixydust bot will ignore your call if you use more than 25 !commands in your comment.**
 
-<b>Bot created 2025-04-09:</b> Based on the https://github.com/hannes-stoffel/hug.bot source code to the https://peakd.com/@hug.bot Hug bot
-<b>Update 2025-08-18:</b> Expand call limit from 10 to 25.  Adjust amount transfered to add bonus CENT token.  Expand maximum command tag limit from 5 to 25.
+<b>Bot created 2026-05-04:</b> Based on the https://github.com/hannes-stoffel/hug.bot source code to the https://peakd.com/@hug.bot Hug bot.
 <hr>

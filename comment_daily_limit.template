@@ -1,19 +1,19 @@
 {{sender_account}}, sorry!
 
-You are out of unicorns for today.
+You are out of pixy dust for today.
 
 You can call the {{token_name}} bot one time per day for every 25 Hive Power delegated to it.  That makes the current call limits:
 
-|Hive Power Delegation|UNICOIN Calls Per Day||
+|Hive Power Delegation|PIXYDUST Calls Per Day||
 |-|-|
-|25|1🦄|
-|50|2🦄|
-|75|3🦄|
-|100|4🦄|
-|125|5🦄|
-|250|10🦄|
-|375|15🦄|
-|500|20🦄|
-|625|25🦄|
+|25|1🧚|
+|50|2🧚|
+|75|3🧚|
+|100|4🧚|
+|125|5🧚|
+|250|10🧚|
+|375|15🧚|
+|500|20🧚|
+|625|25🧚|
 
 <sub>Respond with STOP to remove mentions. Respond with TAGME to reallow mentions.</sub>
