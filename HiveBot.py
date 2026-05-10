@@ -54,10 +54,11 @@ class HiveBot:
     DEBUG_ONE_BLOCK = False
     DEBUG_ONE_CALL = False
 
-    CENT_AMOUNT = 1.0
-    CENT_TOKEN = 'CENT'
-    CENT_RECIPIENT_MEMO = '{{sender_account}} shared a CENT with you.'
-    CENT_CALLER_MEMO = '{{sender_account}} shared a CENT with you.'
+    CENT_AMOUNT_CALLER = 0.003
+    CENT_AMOUNT_RECIPIENT = 0.002
+    CENT_TOKEN = 'HSBIDAO'
+    CENT_RECIPIENT_MEMO = 'You received HSBIDAO from {{target_account}}'
+    CENT_CALLER_MEMO = '{{sender_account}} shared HSBIDAO to {{target_account}}.'
 
     def __init__(self, config: BotConfig):
         self.config = config
@@ -234,20 +235,20 @@ class HiveBot:
             print('No delegations found')
             return float(0)
 
-#        print("Returned delegations:",delegations)
+        self.to_debug(f'Returned delegations:  {delegations}')
 
         # Not sure this will ever return more than one entry, summing to be safe
         total_delegated = 0
         for delegation in delegations:
-#            print("Checking:  ",account['name'],' -> ' + delegation['delegatee'],delegation['vesting_shares']['amount'])
+            print("Checking:  ",account['name'],' -> ' + delegation['delegatee'],delegation['vesting_shares']['amount'])
             if delegation['delegatee'] == deleg_acct:
-#                print("Match:  ",account['name'],' -> ' + delegation['delegatee'],delegation['vesting_shares']['amount'])
+                print("Match:  ",account['name'],' -> ' + delegation['delegatee'],delegation['vesting_shares']['amount'])
 
                 delegated_vests = float(delegation['vesting_shares']['amount']) / denom
                 delegated_base = (delegated_vests / denom) * base_per_mvest
                 total_delegated = total_delegated + delegated_base
 
-#        print(account['name'],' -> ' + delegation['delegatee'] + ': ' + str(total_delegated))
+        print(account['name'],' -> ' + delegation['delegatee'] + ': ' + str(total_delegated))
 
         return float(total_delegated)
 
@@ -380,6 +381,9 @@ class HiveBot:
 
         # Inform to Discord and create the post
         self.to_log(f'+++ Creating collection post {title}')
+
+        self.to_log(f'HIVE.post:  title=title, body={body}, author={author}, permlink={permlink}, community={community}, app={self.config.app_name_version}, tags={tags}')
+
         self.HIVE.post(title=title,
                   body=body,
                   author=author,
@@ -387,6 +391,8 @@ class HiveBot:
                   community=community,
                   app=self.config.app_name_version,
                   tags=tags)
+
+        self.to_log(f'Completed post, waiting for it')
 
         # check for success
         comment = None
@@ -624,7 +630,7 @@ class HiveBot:
             tipping_level = self.config.get_max_tipping_level()
         else:
             # TODO make delegation account config option
-            deleg_acct="uni-coin"
+            deleg_acct="pixydust"
             deleg_power = self.get_delegated_power(author, deleg_acct)
             self.to_log(f'--- {author} has delegated {deleg_power} to {self.config.account_name}')
 
@@ -715,15 +721,16 @@ class HiveBot:
                 self.to_log(f'--- sent {tipping_level.tip_caller} {token_name} to {author}')
                 self.chain_throttle()
 
-            if self.CENT_AMOUNT > 0:
+            if self.CENT_AMOUNT_RECIPIENT > 0:
                 recipient_cent_template = jinja2.Template(self.CENT_RECIPIENT_MEMO)
-                self.hive_wallet.transfer(parent_author, self.CENT_AMOUNT, self.CENT_TOKEN, recipient_cent_template.render(sender_account=author, target_account=parent_author))
-                self.to_log(f'--- sent {self.CENT_AMOUNT} {self.CENT_TOKEN} to {parent_author}')
+                self.hive_wallet.transfer(parent_author, self.CENT_AMOUNT_RECIPIENT, self.CENT_TOKEN, recipient_cent_template.render(sender_account=author, target_account=parent_author))
+                self.to_log(f'--- sent {self.CENT_AMOUNT_RECIPIENT} {self.CENT_TOKEN} to {parent_author}')
                 self.chain_throttle()
 
+            if self.CENT_AMOUNT_CALLER > 0:
                 caller_cent_template = jinja2.Template(self.CENT_CALLER_MEMO)
-                self.hive_wallet.transfer(author, self.CENT_AMOUNT, self.CENT_TOKEN, caller_cent_template.render(sender_account=author, target_account=parent_author))
-                self.to_log(f'--- sent {self.CENT_AMOUNT} {self.CENT_TOKEN} to {author}')
+                self.hive_wallet.transfer(author, self.CENT_AMOUNT_CALLER, self.CENT_TOKEN, caller_cent_template.render(sender_account=author, target_account=parent_author))
+                self.to_log(f'--- sent {self.CENT_AMOUNT_CALLER} {self.CENT_TOKEN} to {author}')
                 self.chain_throttle()
 
             # IMPORTANT: save the fact in Database.
